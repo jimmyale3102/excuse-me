@@ -1,4 +1,4 @@
-package dev.alejo.excuseme.ui.quote
+package dev.alejo.excuseme.ui.excuse
 
 sealed class UIState {
     object Loading : UIState()

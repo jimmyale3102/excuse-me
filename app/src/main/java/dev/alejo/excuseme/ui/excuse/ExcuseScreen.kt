@@ -1,6 +1,5 @@
-package dev.alejo.excuseme.ui.quote
+package dev.alejo.excuseme.ui.excuse
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,20 +11,22 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alejo.excuseme.R
 
 @Composable
-fun QuoteScreen() {
+fun ExcuseScreen(viewModel: ExcuseViewModel) {
     val uiState: UIState = UIState.Success("")
     //val uiState: UIState = UIState.Loading
+
     Box(
         Modifier
             .fillMaxSize()
@@ -33,11 +34,12 @@ fun QuoteScreen() {
     ) {
         when(uiState) {
             is UIState.Loading -> {
-                QuoteLoading(Modifier.align(Alignment.Center))
+                ExcuseLoading(Modifier.align(Alignment.Center))
             }
             is UIState.Success -> {
-                Quote(Modifier.align(Alignment.Center))
-                QuoteOptions(Modifier.align(Alignment.BottomCenter))
+                val excuse: String by viewModel.excuse.observeAsState("")
+                Excuse(Modifier.align(Alignment.Center), excuse)
+                ExcuseOptions(Modifier.align(Alignment.BottomCenter))
             }
             is UIState.Error -> {  }
         }
@@ -45,19 +47,19 @@ fun QuoteScreen() {
 }
 
 @Composable
-fun QuoteLoading(modifier: Modifier) {
+fun ExcuseLoading(modifier: Modifier) {
     CircularProgressIndicator(modifier = modifier)
 }
 
 @Composable
-fun Quote(modifier: Modifier) {
+fun Excuse(modifier: Modifier, excuse: String) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "\"This is an example of quote\"",
+            text = excuse,
             textAlign = TextAlign.Center,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
@@ -70,7 +72,7 @@ fun Quote(modifier: Modifier) {
 }
 
 @Composable
-fun QuoteOptions(modifier: Modifier) {
+fun ExcuseOptions(modifier: Modifier) {
     Row(
         modifier = modifier.padding(bottom = 56.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -88,10 +90,4 @@ fun QuoteOptions(modifier: Modifier) {
             )
         }
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun QuoteScreenPreview() {
-    QuoteScreen()
 }
