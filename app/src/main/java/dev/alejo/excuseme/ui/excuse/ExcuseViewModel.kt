@@ -17,9 +17,13 @@ class ExcuseViewModel @Inject constructor(
     private val _excuse = MutableLiveData<String>()
     val excuse: LiveData<String> = _excuse
 
+    /*
     init {
         getExcuse()
     }
+    */
+
+    fun onGetExcuse() { getExcuse() }
 
     private fun getExcuse() {
         viewModelScope.launch {

@@ -3,4 +3,8 @@
 
     <!-- Quote Screen -->
     <string name="refresh_icon_description">Refrescar</string>
+    <string name="excuse_me">Excuse me</string>
+    <string name="copy">Copy</string>
+    <string name="excuse_me_description">excuse me button</string>
+    <string name="copy_description">Copy button</string>
 </resources>
