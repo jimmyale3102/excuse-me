@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alejo.excuseme.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExcuseScreen(viewModel: ExcuseViewModel) {
     val uiState: UIState = UIState.Success("")
@@ -69,10 +70,11 @@ fun Excuse(modifier: Modifier, excuse: String, category: String) {
         Text(
             text = excuse,
             textAlign = TextAlign.Center,
-            fontSize = 24.sp,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = "Category:",
                 fontWeight = FontWeight.Bold
@@ -86,7 +88,7 @@ fun Excuse(modifier: Modifier, excuse: String, category: String) {
 
 @Composable
 fun ExcuseOptions(modifier: Modifier, onGetExcuse: () -> Unit) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Row(modifier = modifier.padding(bottom = 56.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         ExtendedFloatingActionButton(
             text = { Text(text = stringResource(id = R.string.excuse_me)) },
             icon = {
