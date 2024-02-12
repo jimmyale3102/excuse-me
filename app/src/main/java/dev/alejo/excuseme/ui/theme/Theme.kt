@@ -16,9 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 
 val DarkColorScheme = darkColorScheme(
-    primary = Charcoal,    // Charcoal
-    secondary = DarkGray,  // Dark Grey
-    tertiary = PinkishRed     // Pinkish Red
+    primary = DarkBlue,    // Charcoal
+    secondary = Green,  // Dark Grey
+    tertiary = Color.White,     // Pinkish Red
+    background = DarkBlue,
+    onBackground = DarkBlue,
+    surface = DarkBlue
 )
 
 @Composable

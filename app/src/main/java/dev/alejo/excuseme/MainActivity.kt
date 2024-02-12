@@ -12,6 +12,7 @@ import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alejo.excuseme.ui.excuse.ExcuseScreen
 import dev.alejo.excuseme.ui.excuse.ExcuseViewModel
+import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.ExcuseMeTheme
 
 @AndroidEntryPoint
@@ -26,12 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ExcuseMeTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    ExcuseScreen(viewModel)
-                }
+                ExcuseScreen(viewModel)
             }
         }
     }
