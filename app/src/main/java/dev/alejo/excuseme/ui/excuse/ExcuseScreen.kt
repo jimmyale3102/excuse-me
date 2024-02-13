@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +19,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alejo.excuseme.R
 import dev.alejo.excuseme.data.ExcuseModel
+import dev.alejo.excuseme.ui.component.ExcuseFAB
 import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.Green
 
@@ -110,25 +108,15 @@ fun ExcuseOptions(modifier: Modifier, onGetExcuse: () -> Unit) {
         modifier = modifier.padding(bottom = 56.dp),
         horizontalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        FloatingActionButton(
-            containerColor = Green,
-            contentColor = Color.White,
-            onClick = { /** TODO **/ }
+        ExcuseFAB(
+            painterResourceId = R.drawable.ic_copy,
+            contentDescriptionId = R.string.copy_description
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
-                contentDescription = stringResource(id = R.string.copy_description)
-            )
+            /** TODO **/
         }
-        FloatingActionButton(
-            containerColor = Green,
-            contentColor = Color.White,
-            onClick = { onGetExcuse() }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_refresh),
-                contentDescription = stringResource(id = R.string.excuse_me_description)
-            )
-        }
+        ExcuseFAB(
+            painterResourceId = R.drawable.ic_refresh,
+            contentDescriptionId = R.string.refresh_icon_description
+        ) { onGetExcuse() }
     }
 }
