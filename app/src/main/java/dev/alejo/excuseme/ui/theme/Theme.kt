@@ -16,9 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 
 val DarkColorScheme = darkColorScheme(
-    primary = Charcoal,    // Charcoal
-    secondary = DarkGray,  // Dark Grey
-    tertiary = PinkishRed     // Pinkish Red
+    primary = DarkBlue,    // Charcoal
+    secondary = Green,  // Dark Grey
+    tertiary = Color.White,     // Pinkish Red
+    background = DarkBlue,
+    onBackground = DarkBlue,
+    surface = DarkBlue
 )
 
 @Composable
@@ -37,9 +40,9 @@ fun ExcuseMeTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = Color.White.toArgb()
+            window.statusBarColor = Color.Transparent.toArgb()
             window.navigationBarColor = colorScheme.surfaceColorAtElevation(4.dp).toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
 

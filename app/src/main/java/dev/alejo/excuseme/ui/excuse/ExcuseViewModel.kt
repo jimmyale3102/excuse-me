@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.alejo.excuseme.domain.GetExcuseUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,16 +15,22 @@ class ExcuseViewModel @Inject constructor(
     private val getExcuseUseCase: GetExcuseUseCase
 ) : ViewModel() {
 
-    private val _excuse = MutableLiveData<String>()
-    val excuse: LiveData<String> = _excuse
+    private val _uiState = MutableLiveData<UIState>()
+    val uiState: LiveData<UIState> = _uiState
 
     init {
+        _uiState.value = UIState.Loading
         getExcuse()
     }
 
+    fun onGetExcuse() { getExcuse() }
+
     private fun getExcuse() {
         viewModelScope.launch {
-            _excuse.value = getExcuseUseCase()
+            val excuseData = getExcuseUseCase()
+            _uiState.value = excuseData?.let {
+                UIState.Success(it)
+            } ?: UIState.Error(Throwable("Something went wrong"))
         }
     }
 }
