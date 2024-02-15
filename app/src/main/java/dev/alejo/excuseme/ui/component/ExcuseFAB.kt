@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.alejo.excuseme.R
+import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.Green
 
 @Composable
@@ -25,6 +26,7 @@ fun ExcuseFAB(
     ) {
         Icon(
             painter = painterResource(id = painterResourceId),
+            tint = DarkBlue,
             contentDescription = stringResource(id = contentDescriptionId)
         )
     }
