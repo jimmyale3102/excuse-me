@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.alejo.excuseme.domain.GetExcuseUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +16,8 @@ class ExcuseViewModel @Inject constructor(
 
     private val _uiState = MutableLiveData<UIState>()
     val uiState: LiveData<UIState> = _uiState
+    private val _categoriesVisible = MutableLiveData<Boolean>()
+    val categoriesVisible: LiveData<Boolean> = _categoriesVisible
 
     init {
         _uiState.value = UIState.Loading
@@ -33,4 +34,9 @@ class ExcuseViewModel @Inject constructor(
             } ?: UIState.Error(Throwable("Something went wrong"))
         }
     }
+
+    fun onCategoriesOpened() { _categoriesVisible.value = true }
+
+    fun onCategorySelected() { _categoriesVisible.value = false }
+
 }

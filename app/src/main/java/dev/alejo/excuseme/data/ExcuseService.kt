@@ -7,7 +7,11 @@ import javax.inject.Inject
 class ExcuseService @Inject constructor(private val apiClient: ExcuseApiClient) {
 
     suspend fun getRandomExcuse(): List<ExcuseModel>? = withContext(Dispatchers.IO) {
-        apiClient.getRandomExcuse().body()
+        try {
+            apiClient.getRandomExcuse().body()
+        } catch (e: Throwable) {
+            null
+        }
     }
 
 }
