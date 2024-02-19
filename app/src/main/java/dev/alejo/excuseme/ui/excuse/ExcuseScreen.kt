@@ -9,11 +9,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alejo.excuseme.R
 import dev.alejo.excuseme.data.ExcuseModel
-import dev.alejo.excuseme.ui.component.CategoryComponent
+import dev.alejo.excuseme.ui.component.CategoryItem
 import dev.alejo.excuseme.ui.component.ExcuseButton
 import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.Green
@@ -48,56 +55,99 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
             .background(color = DarkBlue)
             .padding(16.dp)
     ) {
-        CategoryButton { viewModel.onCategoriesOpened() }
-        if (categoriesVisible) {
-            CategoryComponent(categories)
+        CategoryButton(
+            categoriesVisible,
+            categories
+        ) { categoryAction ->
+            viewModel.onCategoriesAction(categoryAction)
         }
-        AnimatedContent(
-            modifier = Modifier.align(Alignment.Center),
-            targetState = uiState,
-            label = ""
-        ) { targetState ->
-            when (targetState) {
-                is UIState.Loading -> {
-                    ExcuseLoading(Modifier.align(Alignment.Center))
-                }
+        if (!categoriesVisible) {
+            AnimatedContent(
+                modifier = Modifier.align(Alignment.Center),
+                targetState = uiState,
+                label = ""
+            ) { targetState ->
+                when (targetState) {
+                    is UIState.Loading -> {
+                        ExcuseLoading(Modifier.align(Alignment.Center))
+                    }
 
-                is UIState.Success -> {
-                    Excuse(
-                        Modifier.align(Alignment.Center),
-                        (uiState as UIState.Success).excuseData
-                    )
-                }
+                    is UIState.Success -> {
+                        Excuse(
+                            Modifier.align(Alignment.Center),
+                            (uiState as UIState.Success).excuseData
+                        )
+                    }
 
-                is UIState.Error -> {
-                    ErrorMessage(
-                        Modifier.align(Alignment.Center),
-                        (uiState as UIState.Error).error.message.toString()
-                    )
+                    is UIState.Error -> {
+                        ErrorMessage(
+                            Modifier.align(Alignment.Center),
+                            (uiState as UIState.Error).error.message.toString()
+                        )
+                    }
                 }
             }
-        }
 
-        ExcuseOptions(Modifier.align(Alignment.BottomCenter)) { viewModel.onGetExcuse() }
+            ExcuseOptions(Modifier.align(Alignment.BottomCenter)) { viewModel.onGetExcuse() }
+        }
     }
 }
 
 @Composable
-fun CategoryButton(onCategoriesClick: () -> Unit) {
-    OutlinedButton(
+fun CategoryButton(
+    categoriesVisible: Boolean,
+    categories: List<String>,
+    onCategoriesAction: (CategoryAction) -> Unit
+) {
+    Column(
         modifier = Modifier
-            .padding(top = 32.dp),
-        onClick = { onCategoriesClick() }
+            .fillMaxWidth()
+            .padding(top = 32.dp)
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_category),
-            tint = Green,
-            contentDescription = stringResource(
-                id = R.string.categories
-            )
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(id = R.string.categories), color = Color.White)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedButton(onClick = { onCategoriesAction(CategoryAction.Opened) }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_category),
+                    tint = Green,
+                    contentDescription = stringResource(
+                        id = R.string.categories
+                    )
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = stringResource(id = R.string.categories), color = Color.White)
+            }
+
+            if (categoriesVisible) {
+                IconButton(onClick = { onCategoriesAction(CategoryAction.Closed) }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        tint = Color.White,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+        if (categoriesVisible) {
+            CategoryList(categories, onCategoriesAction)
+        }
+    }
+}
+
+@Composable
+fun CategoryList(categories: List<String>, onCategoriesAction: (CategoryAction) -> Unit) {
+    LazyVerticalGrid(
+        modifier = Modifier.padding(top = 16.dp),
+        columns = GridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(categories) { categoryName ->
+            CategoryItem(categoryName = categoryName, onCategoriesAction)
+        }
     }
 }
 

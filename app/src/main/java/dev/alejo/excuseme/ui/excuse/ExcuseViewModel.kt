@@ -35,7 +35,16 @@ class ExcuseViewModel @Inject constructor(
         }
     }
 
-    fun onCategoriesOpened() { _categoriesVisible.value = true }
+    fun onCategoriesAction(categoryAction: CategoryAction) {
+        when (categoryAction) {
+            is CategoryAction.Opened -> _categoriesVisible.value = true
+            is CategoryAction.Closed -> _categoriesVisible.value = false
+            is CategoryAction.Selected -> {
+                _categoriesVisible.value = false
+                // Set the category selected
+            }
+        }
+    }
 
     fun onCategorySelected() { _categoriesVisible.value = false }
 
