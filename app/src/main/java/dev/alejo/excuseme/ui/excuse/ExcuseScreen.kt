@@ -1,7 +1,6 @@
 package dev.alejo.excuseme.ui.excuse
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,16 +36,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alejo.excuseme.R
 import dev.alejo.excuseme.data.ExcuseModel
+import dev.alejo.excuseme.data.local.ExcuseCategory
 import dev.alejo.excuseme.ui.component.CategoryItem
 import dev.alejo.excuseme.ui.component.ExcuseButton
 import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.Green
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ExcuseScreen(viewModel: ExcuseViewModel) {
     val uiState: UIState by viewModel.uiState.observeAsState(UIState.Loading)
-    val categories: List<String> = listOf("Funny", "Friends", "Random", "ASDDD", "Hey hey")
+    val categories: List<ExcuseCategory> by viewModel.categories.observeAsState(emptyList())
     val categoriesVisible: Boolean by viewModel.categoriesVisible.observeAsState(false)
 
     Box(
@@ -96,7 +95,7 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
 @Composable
 fun CategoryButton(
     categoriesVisible: Boolean,
-    categories: List<String>,
+    categories: List<ExcuseCategory>,
     onCategoriesAction: (CategoryAction) -> Unit
 ) {
     Column(
@@ -138,15 +137,15 @@ fun CategoryButton(
 }
 
 @Composable
-fun CategoryList(categories: List<String>, onCategoriesAction: (CategoryAction) -> Unit) {
+fun CategoryList(categories: List<ExcuseCategory>, onCategoriesAction: (CategoryAction) -> Unit) {
     LazyVerticalGrid(
         modifier = Modifier.padding(top = 16.dp),
         columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(categories) { categoryName ->
-            CategoryItem(categoryName = categoryName, onCategoriesAction)
+        items(categories) { category ->
+            CategoryItem(category = category, onCategoriesAction)
         }
     }
 }

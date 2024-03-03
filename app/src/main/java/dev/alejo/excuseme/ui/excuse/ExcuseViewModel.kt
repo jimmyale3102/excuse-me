@@ -5,23 +5,29 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.alejo.excuseme.data.local.ExcuseCategory
+import dev.alejo.excuseme.domain.GetExcuseCategoryUseCase
 import dev.alejo.excuseme.domain.GetExcuseUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExcuseViewModel @Inject constructor(
-    private val getExcuseUseCase: GetExcuseUseCase
+    private val getExcuseUseCase: GetExcuseUseCase,
+    private val getExcuseCategoryUseCase: GetExcuseCategoryUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<UIState>()
     val uiState: LiveData<UIState> = _uiState
+    private val _categories = MutableLiveData<List<ExcuseCategory>>()
+    val categories: LiveData<List<ExcuseCategory>> = _categories
     private val _categoriesVisible = MutableLiveData<Boolean>()
     val categoriesVisible: LiveData<Boolean> = _categoriesVisible
 
     init {
         _uiState.value = UIState.Loading
         getExcuse()
+        getCategories()
     }
 
     fun onGetExcuse() { getExcuse() }
@@ -47,5 +53,11 @@ class ExcuseViewModel @Inject constructor(
     }
 
     fun onCategorySelected() { _categoriesVisible.value = false }
+
+    private fun getCategories() {
+        viewModelScope.launch {
+            _categories.value = getExcuseCategoryUseCase()
+        }
+    }
 
 }
