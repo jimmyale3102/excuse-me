@@ -2,7 +2,8 @@ package dev.alejo.excuseme.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -14,15 +15,17 @@ import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.Green
 
 @Composable
-fun ExcuseFAB(
+fun ExcuseButton(
     @DrawableRes painterResourceId: Int,
     @StringRes contentDescriptionId: Int,
     onClick: () -> Unit
 ) {
-    FloatingActionButton(
-        containerColor = Green,
-        contentColor = Color.White,
-        onClick = { onClick() }
+    Button(
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Green,
+            contentColor = Color.White
+        )
     ) {
         Icon(
             painter = painterResource(id = painterResourceId),
@@ -35,7 +38,7 @@ fun ExcuseFAB(
 @Composable
 @Preview(showBackground = true)
 fun ExcuseFABPreview() {
-    ExcuseFAB(
+    ExcuseButton(
         painterResourceId = R.drawable.ic_refresh,
         contentDescriptionId = R.string.refresh_icon_description
     ) {  }
