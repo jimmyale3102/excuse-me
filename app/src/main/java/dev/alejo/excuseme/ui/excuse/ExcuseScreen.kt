@@ -47,6 +47,9 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
     val uiState: UIState by viewModel.uiState.observeAsState(UIState.Loading)
     val categories: List<ExcuseCategory> by viewModel.categories.observeAsState(emptyList())
     val categoriesVisible: Boolean by viewModel.categoriesVisible.observeAsState(false)
+    val categorySelected: ExcuseCategory by viewModel.categorySelected.observeAsState(
+        viewModel.getCategoryRandom()
+    )
 
     Box(
         Modifier
@@ -56,7 +59,8 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
     ) {
         CategoryButton(
             categoriesVisible,
-            categories
+            categories,
+            categorySelected
         ) { categoryAction ->
             viewModel.onCategoriesAction(categoryAction)
         }
@@ -67,21 +71,18 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
                 label = ""
             ) { targetState ->
                 when (targetState) {
-                    is UIState.Loading -> {
-                        ExcuseLoading(Modifier.align(Alignment.Center))
-                    }
-
-                    is UIState.Success -> {
-                        Excuse(
-                            Modifier.align(Alignment.Center),
-                            (uiState as UIState.Success).excuseData
-                        )
-                    }
-
                     is UIState.Error -> {
                         ErrorMessage(
                             Modifier.align(Alignment.Center),
-                            (uiState as UIState.Error).error.message.toString()
+                            targetState.error.message.toString()
+                        )
+                    }
+
+                    UIState.Loading -> ExcuseLoading(Modifier.align(Alignment.Center))
+                    is UIState.Success -> {
+                        Excuse(
+                            Modifier.align(Alignment.Center),
+                            targetState.excuseData
                         )
                     }
                 }
@@ -96,6 +97,7 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
 fun CategoryButton(
     categoriesVisible: Boolean,
     categories: List<ExcuseCategory>,
+    categorySelected: ExcuseCategory,
     onCategoriesAction: (CategoryAction) -> Unit
 ) {
     Column(
@@ -117,7 +119,7 @@ fun CategoryButton(
                     )
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = stringResource(id = R.string.categories), color = Color.White)
+                Text(text = categorySelected.name, color = Color.White)
             }
 
             if (categoriesVisible) {

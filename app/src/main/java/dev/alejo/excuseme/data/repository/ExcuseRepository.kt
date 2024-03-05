@@ -16,16 +16,20 @@ import dev.alejo.excuseme.data.local.ExcuseCategory
 import javax.inject.Inject
 
 class ExcuseRepository @Inject constructor(private val service: ExcuseService) {
-    suspend fun getExcuse(): ExcuseModel? = service.getRandomExcuse()?.get(0)
+    suspend fun getExcuse(): ExcuseModel? = service.getRandomExcuse()?.firstOrNull()
+
+    suspend fun getExcuseByCategory(categoryName: String): ExcuseModel? =
+        service.getExcuseByCategory(categoryName)?.firstOrNull()
+
     fun getCategories(): List<ExcuseCategory> = listOf(
-        ExcuseCategory("Family", Icons.Default.FamilyRestroom),
-        ExcuseCategory("Office", Icons.Default.Desk),
-        ExcuseCategory("Children", Icons.Default.ChildFriendly),
-        ExcuseCategory("College", Icons.Default.School),
-        ExcuseCategory("Party", Icons.Default.Celebration),
-        ExcuseCategory("Funny", Icons.Default.SentimentVerySatisfied),
-        ExcuseCategory("Unbelievable", Icons.Default.PsychologyAlt),
-        ExcuseCategory("Developers", Icons.Default.Code),
-        ExcuseCategory("Gaming", Icons.Default.VideogameAsset)
+        ExcuseCategory(name = "Family", icon = Icons.Default.FamilyRestroom),
+        ExcuseCategory(name = "Office", icon = Icons.Default.Desk),
+        ExcuseCategory(name = "Children", icon = Icons.Default.ChildFriendly),
+        ExcuseCategory(name = "College", icon = Icons.Default.School),
+        ExcuseCategory(name = "Party", icon = Icons.Default.Celebration),
+        ExcuseCategory(name = "Funny", icon = Icons.Default.SentimentVerySatisfied),
+        ExcuseCategory(name = "Unbelievable", icon = Icons.Default.PsychologyAlt),
+        ExcuseCategory(name = "Developers", icon = Icons.Default.Code),
+        ExcuseCategory(name = "Gaming", icon = Icons.Default.VideogameAsset)
     )
 }

@@ -18,7 +18,6 @@ import dev.alejo.excuseme.ui.excuse.CategoryAction
 import dev.alejo.excuseme.ui.theme.DarkBlue
 import dev.alejo.excuseme.ui.theme.Green
 
-
 @Composable
 fun CategoryItem(category: ExcuseCategory, onCategoriesAction: (CategoryAction) -> Unit) {
     Button(
@@ -27,7 +26,7 @@ fun CategoryItem(category: ExcuseCategory, onCategoriesAction: (CategoryAction) 
             containerColor = Green,
             contentColor = Color.White
         ),
-        onClick = { onCategoriesAction(CategoryAction.Selected(category.name)) }
+        onClick = { onCategoriesAction(CategoryAction.Selected(category)) }
     ) {
         Icon(
             imageVector = category.icon,
