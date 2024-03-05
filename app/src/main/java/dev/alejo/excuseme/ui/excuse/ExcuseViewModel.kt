@@ -1,5 +1,7 @@
 package dev.alejo.excuseme.ui.excuse
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.lifecycle.LiveData
@@ -37,6 +39,17 @@ class ExcuseViewModel @Inject constructor(
     }
 
     fun onGetExcuse() { getExcuse() }
+
+    fun onSendExcuse(context: Context, excuse: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, excuse)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
+    }
 
     private fun getExcuse() {
         _uiState.value = UIState.Loading

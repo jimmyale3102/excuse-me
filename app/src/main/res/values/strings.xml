@@ -9,4 +9,5 @@
     <string name="copy_description">Copy button</string>
     <string name="category">Category:</string>
     <string name="categories">Categories</string>
+    <string name="not_excuse_error_msg">Not excuse to share</string>
 </resources>

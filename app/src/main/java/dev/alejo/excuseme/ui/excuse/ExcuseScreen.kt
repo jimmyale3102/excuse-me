@@ -1,5 +1,6 @@
 package dev.alejo.excuseme.ui.excuse
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,12 +29,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import dev.alejo.excuseme.R
 import dev.alejo.excuseme.data.ExcuseModel
 import dev.alejo.excuseme.data.local.ExcuseCategory
@@ -44,6 +47,8 @@ import dev.alejo.excuseme.ui.theme.Green
 
 @Composable
 fun ExcuseScreen(viewModel: ExcuseViewModel) {
+
+    val context = LocalContext.current
     val uiState: UIState by viewModel.uiState.observeAsState(UIState.Loading)
     val categories: List<ExcuseCategory> by viewModel.categories.observeAsState(emptyList())
     val categoriesVisible: Boolean by viewModel.categoriesVisible.observeAsState(false)
@@ -88,7 +93,23 @@ fun ExcuseScreen(viewModel: ExcuseViewModel) {
                 }
             }
 
-            ExcuseOptions(Modifier.align(Alignment.BottomCenter)) { viewModel.onGetExcuse() }
+            ExcuseOptions(Modifier.align(Alignment.BottomCenter)) { excuseOption ->
+                when (excuseOption) {
+                    ExcuseOption.Refresh -> viewModel.onGetExcuse()
+                    ExcuseOption.Send -> if (uiState is UIState.Success) {
+                        viewModel.onSendExcuse(
+                            context,
+                            (uiState as UIState.Success).excuseData.excuse
+                        )
+                    } else {
+                        Toast.makeText(
+                            context,
+                            ContextCompat.getString(context, R.string.not_excuse_error_msg),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
         }
     }
 }
@@ -199,7 +220,7 @@ fun ErrorMessage(modifier: Modifier, errorMessage: String) {
 }
 
 @Composable
-fun ExcuseOptions(modifier: Modifier, onGetExcuse: () -> Unit) {
+fun ExcuseOptions(modifier: Modifier, onClick: (ExcuseOption) -> Unit) {
     Row(
         modifier = modifier.padding(bottom = 56.dp),
         horizontalArrangement = Arrangement.spacedBy(32.dp)
@@ -207,12 +228,10 @@ fun ExcuseOptions(modifier: Modifier, onGetExcuse: () -> Unit) {
         ExcuseButton(
             painterResourceId = R.drawable.ic_copy,
             contentDescriptionId = R.string.copy_description
-        ) {
-            /** TODO **/
-        }
+        ) { onClick(ExcuseOption.Send) }
         ExcuseButton(
             painterResourceId = R.drawable.ic_refresh,
             contentDescriptionId = R.string.refresh_icon_description
-        ) { onGetExcuse() }
+        ) { onClick(ExcuseOption.Refresh) }
     }
 }
